@@ -118,10 +118,15 @@ class Gallery extends Widget
         if ($src === null) {
             return null;
         }
+
+        $id = $this->options['id'];
+
         $url = ArrayHelper::getValue($item, 'url', $src);
         $options = ArrayHelper::getValue($item, 'options', []);
         $imageOptions = ArrayHelper::getValue($item, 'imageOptions', []);
         Html::addCssClass($options, 'gallery-item');
+
+        $options = ArrayHelper::merge($options, ['data-gallery' => '#blueimp-gallery-'.$id]);
 
         return Html::a(Html::img($src, $imageOptions), $url, $options);
     }
@@ -165,12 +170,8 @@ class Gallery extends Widget
     {
         $view = $this->getView();
         GalleryAsset::register($view);
-        DosamigosAsset::register($view);
 
         $id = $this->options['id'];
-        $options = Json::encode($this->clientOptions);
-        $js = "dosamigos.gallery.registerLightBoxHandlers('#$id a', $options);";
-        $view->registerJs($js);
 
         if (!empty($this->clientEvents)) {
             $js = [];
